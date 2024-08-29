@@ -1,4 +1,6 @@
 {
     "css.lint.unknownAtRules": "ignore",
-    "git.enabled": true
+    "git.enabled": true,
+    "git.branchRandomName.enable": true,
+    "git.decorations.enabled": false
   }
