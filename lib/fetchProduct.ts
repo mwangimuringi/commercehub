@@ -8,7 +8,7 @@ export interface Product {
   }
   
 
-export async function fetchProducts() {
+  export async function fetchProducts(): Promise<Product[]> {
     try {
       const response = await fetch("/api/products");
       if (!response.ok) {
@@ -19,5 +19,5 @@ export async function fetchProducts() {
       console.error("Error fetching products:", error);
       throw error;
     }
-  }
+  }  
   
