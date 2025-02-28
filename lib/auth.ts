@@ -11,3 +11,11 @@ export async function isAdmin(userId: string): Promise<boolean> {
     return user?.publicMetadata?.role === "admin";
   }
   
+  export async function signIn(email: string, password: string) {
+    return await clerk.clients.createEmailPasswordSession(email, password);
+  }
+  
+  export async function signOut(sessionId: string) {
+    return await clerk.sessions.revokeSession(sessionId);
+  }
+  
