@@ -28,3 +28,12 @@ export async function isAdmin(userId: string): Promise<boolean> {
     }
   }
   
+  export async function getUser(userId: string) {
+    try {
+      return await clerk.users.getUser(userId);
+    } catch (error) {
+      console.error(`Failed to fetch user ${userId}:`, error);
+      throw new Error("User fetch failed");
+    }
+  }
+  
