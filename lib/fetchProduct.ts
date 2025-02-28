@@ -1,3 +1,13 @@
+export interface Product {
+    id: string;
+    name: string;
+    description?: string;
+    price: number;
+    stock: number;
+    createdAt: string;
+  }
+  
+
 export async function fetchProducts() {
     try {
       const response = await fetch("/api/products");
