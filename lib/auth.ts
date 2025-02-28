@@ -19,3 +19,12 @@ export async function isAdmin(userId: string): Promise<boolean> {
     return await clerk.sessions.revokeSession(sessionId);
   }
   
+  export async function verifyToken(token: string) {
+    try {
+      return await clerk.verifyToken(token);
+    } catch (error) {
+      console.error("Token verification failed:", error);
+      return null;
+    }
+  }
+  
