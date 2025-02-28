@@ -1,10 +1,13 @@
 // src/lib/auth.ts
-export async function getUser(userId: string) {
-    try {
-      return await clerk.users.getUser(userId);
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      return null;
-    }
+import { Clerk, WithAuth } from "@clerk/clerk-sdk-node";
+
+const clerk = new Clerk({ secretKey: process.env.CLERK_SECRET_KEY! });
+
+export const withAuth: WithAuth = clerk.withAuth();
+export default clerk;
+
+export async function isAdmin(userId: string): Promise<boolean> {
+    const user = await getUser(userId);
+    return user?.publicMetadata?.role === "admin";
   }
   
