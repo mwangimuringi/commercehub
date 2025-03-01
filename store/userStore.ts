@@ -23,3 +23,9 @@ interface User {
   email: string;
   name: string;
 }
+
+const userStore = useUserStore();
+
+export const updateUser = (user: User) => {
+  userStore.setUser(user);
+};
