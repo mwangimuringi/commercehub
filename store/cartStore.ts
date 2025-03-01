@@ -1,58 +1,58 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { z } from 'zod'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const cartSchema = z.object({
-  id: z.string(),
-  items: z.array(
-    z.object({
-      id: z.string(),
-      quantity: z.number(),
-      productId: z.string(),
-      variantId: z.string(),
-    })
-  ),
-})
-
-type Cart = z.infer<typeof cartSchema>
-
-type CartStore = {
-  cart: Cart
-  setCart: (cart: Cart) => void
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
 }
 
-const cartStore = create<CartStore>((set) => ({
-  cart: {
-    id: '',
-    items: [],
-  },
-  setCart: (cart) => set({ cart }),
-}))
+interface CartState {
+  cart: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: string) => void;
+  clearCart: () => void;
+  getTotalPrice: () => number;
+  getTotalItems: () => number;
+}
 
-cartStore.subscribe(
-  (store) => localStorage.setItem('cart', JSON.stringify(store.cart))
-)
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      cart: [],
 
-export const useCartStore = cartStore
+      addItem: (item) => {
+        set((state) => {
+          const existingItem = state.cart.find((cartItem) => cartItem.id === item.id);
+          if (existingItem) {
+            return {
+              cart: state.cart.map((cartItem) =>
+                cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+              ),
+            };
+          } else {
+            return { cart: [...state.cart, { ...item, quantity: 1 }] };
+          }
+        });
+      },
 
-export const persistCartStore = persist(
-  (set) => ({
-    cart: cartStore.getState().cart,
-    setCart: (cart) => set({ cart }),
-  }),
-  {
-    name: 'cart',
-    getStorage: () => localStorage,
-  }
-)
+      removeItem: (id) => {
+        set((state) => ({
+          cart: state.cart
+            .map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item))
+            .filter((item) => item.quantity > 0),
+        }));
+      },
 
-export const cartStorePersist = persist(
-  (set) => ({
-    cart: cartStore.getState().cart,
-    setCart: (cart) => set({ cart }),
-  }),
-  {
-    name: 'cart',
-    getStorage: () => localStorage,
-  }
-)
+      clearCart: () => set({ cart: [] }),
+
+      getTotalPrice: () => get().cart.reduce((total, item) => total + item.price * item.quantity, 0),
+
+      getTotalItems: () => get().cart.reduce((total, item) => total + item.quantity, 0),
+    }),
+    {
+      name: "cart-storage", // Persist cart data in localStorage
+    }
+  )
+);
