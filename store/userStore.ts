@@ -29,3 +29,11 @@ const userStore = useUserStore();
 export const updateUser = (user: User) => {
   userStore.setUser(user);
 };
+
+export const getUser = () => {
+  return userStore.user;
+};
+
+export const clearUser = () => {
+    userStore.setUser(null);
+};
