@@ -20,3 +20,4 @@ type CartStore = {
   cart: Cart
   setCart: (cart: Cart) => void
 }
+
