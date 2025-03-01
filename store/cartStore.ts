@@ -13,3 +13,10 @@ const cartSchema = z.object({
     })
   ),
 })
+
+type Cart = z.infer<typeof cartSchema>
+
+type CartStore = {
+  cart: Cart
+  setCart: (cart: Cart) => void
+}
