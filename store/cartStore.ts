@@ -28,3 +28,7 @@ const cartStore = create<CartStore>((set) => ({
   },
   setCart: (cart) => set({ cart }),
 }))
+
+cartStore.subscribe(
+  (store) => localStorage.setItem('cart', JSON.stringify(store.cart))
+)
