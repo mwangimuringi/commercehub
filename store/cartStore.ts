@@ -21,3 +21,10 @@ type CartStore = {
   setCart: (cart: Cart) => void
 }
 
+const cartStore = create<CartStore>((set) => ({
+  cart: {
+    id: '',
+    items: [],
+  },
+  setCart: (cart) => set({ cart }),
+}))
