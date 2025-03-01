@@ -32,3 +32,16 @@ const cartStore = create<CartStore>((set) => ({
 cartStore.subscribe(
   (store) => localStorage.setItem('cart', JSON.stringify(store.cart))
 )
+
+export const useCartStore = cartStore
+
+export const persistCartStore = persist(
+  (set) => ({
+    cart: cartStore.getState().cart,
+    setCart: (cart) => set({ cart }),
+  }),
+  {
+    name: 'cart',
+    getStorage: () => localStorage,
+  }
+)
