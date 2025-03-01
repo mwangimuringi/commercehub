@@ -17,3 +17,9 @@ export const useUserStore = create<UserState>()(
     }
   )
 );
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
