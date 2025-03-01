@@ -1,39 +1,41 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  token?: string;
+}
+
 interface UserState {
   user: User | null;
-  setUser: (user: User | null) => void;
+  login: (userData: User) => void;
+  logout: () => void;
+  updateUser: (updatedData: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       user: null,
-      setUser: (user) => set({ user }),
+
+      login: (userData) => {
+        set({ user: userData });
+      },
+
+      logout: () => {
+        set({ user: null });
+      },
+
+      updateUser: (updatedData) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updatedData } : null,
+        }));
+      },
     }),
     {
-      name: "user-storage", // Persist user data in localStorage
+      name: "user-storage", // Persist user session in localStorage
     }
   )
 );
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
-const userStore = useUserStore();
-
-export const updateUser = (user: User) => {
-  userStore.setUser(user);
-};
-
-export const getUser = () => {
-  return userStore.user;
-};
-
-export const clearUser = () => {
-    userStore.setUser(null);
-};
