@@ -45,3 +45,14 @@ export const persistCartStore = persist(
     getStorage: () => localStorage,
   }
 )
+
+export const cartStorePersist = persist(
+  (set) => ({
+    cart: cartStore.getState().cart,
+    setCart: (cart) => set({ cart }),
+  }),
+  {
+    name: 'cart',
+    getStorage: () => localStorage,
+  }
+)
